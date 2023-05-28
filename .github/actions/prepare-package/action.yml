@@ -1,0 +1,20 @@
+name: 'Prepare Package'
+description: 'Sets the content of the package and build it.'
+inputs:
+  name:
+    description: 'Change the name of the package.'
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: Set Name of the Package
+      run: ${GITHUB_ACTION_PATH}/set-package-name.sh ${{ inputs.name }}
+      shell: bash
+
+    - name: Upload Artifact
+      run: ${GITHUB_ACTION_PATH}/prepare-package-contents.sh
+      shell: bash
+
+    - run: npm pack
+      shell: bash
