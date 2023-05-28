@@ -41,7 +41,8 @@
             {"type": "changed", "section": ":hammer: Changed", "hidden": false},
             {"type": "updated", "section": ":hammer: Changed", "hidden": false},
             {"type": "fixed", "section": ":tools: Fixed", "hidden": false},
-            {"type": "docs", "hidden": true}
+            {"type": "docs", "hidden": true},
+            {"type": "ci", "hidden": true}
           ]
         }
       }
@@ -49,8 +50,7 @@
     [
       "@semantic-release/exec",
       {
-        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION",
-        "publishCmd": "echo ${nextRelease.version} > .VERSION"
+        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
       }
     ],
     [
@@ -63,7 +63,8 @@
       "@semantic-release/git",
       {
         "assets": [
-          "CHANGELOG.md"
+          "CHANGELOG.md",
+          "package.json"
         ]
       }
     ]
