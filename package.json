@@ -18,5 +18,13 @@
   "author": {
     "name": "Javier García",
     "email": "support@monogum.games"
-  }
+  },
+  
+  "samples": [
+    {
+      "displayName": "Refs Component for Prefabs",
+      "description": "Contains sample of how to use the PropertyRefs with prefabs.",
+      "path": "Samples~/RefsComponentPrefabs"
+    }
+  ]
 }
