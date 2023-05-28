@@ -1,0 +1,83 @@
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y --no-install-suggests --no-install-recommends jq
+          npm install -g semantic-release@21
+          npm install -g @semantic-release/changelog
+          npm install -g @semantic-release/commit-analyzer
+          npm install -g @semantic-release/release-notes-generator
+          npm install -g @semantic-release/exec
+          npm install -g @semantic-release/git
+          npm install -g @semantic-release/github
+          npm install -g conventional-changelog-conventionalcommits
+
+      - name: Set Version
+        run: |
+          semantic-release -d --no-ci
+          test -e .VERSION || jq -r '.version' package.json > .VERSION
+          VERSION=$(cat .VERSION)
+          echo "The Version is $(cat .VERSION)"
+          jq --arg version "$VERSION" '.version=$version' package.json > tmp.package.json
+          mv tmp.package.json package.json
+          semantic-release
+
+      - name: Pack
+        run: |
+          mv Samples Samples\~
+          rm .VERSION
+          rm .gitignore
+          rm .releaserc.json
+          rm -r .github
+          npm pack
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            *.tgz
+
+  deploy:
+    name: Publish Package
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+     contents: read
+     id-token: write
+    steps:
+
+      - name: Setup Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+      
+      - name: Publish
+        run: |
+          cd artifact && mv *.tgz .. && cd ..
+          rm -r artifact && ls
+          npm publish *.tgz --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
