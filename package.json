@@ -1,25 +1,24 @@
 {
   "name": "games.monogum.bricksbucket.propertyrefs",
-  "version": "0.0.0",
-  
+  "version": "0.1.0-dev.1",
   "displayName": "Property Refs",
   "description": "PropertyRef allows you to create shortcuts to the values of a prefab and modify them.",
   "unity": "2020.1",
   "unityRelease": "11f1",
-
   "changelogUrl": "https://github.com/javier-games/property-refs/blob/main/CHANGELOG.md",
   "documentationUrl": "https://github.com/javier-games/property-refs",
-  
   "license": "MIT",
   "licensesUrl": "https://github.com/javier-games/property-refs/blob/main/LICENSE",
-  
-  "keywords": ["unity", "unity editor", "prefabs", "tools"],
-  
+  "keywords": [
+    "unity",
+    "unity editor",
+    "prefabs",
+    "tools"
+  ],
   "author": {
     "name": "Javier García",
     "email": "support@monogum.games"
   },
-  
   "samples": [
     {
       "displayName": "Refs Component for Prefabs",
