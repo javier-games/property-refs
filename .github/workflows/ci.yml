@@ -14,7 +14,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Environment
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Build Source Generator
+        run:  cd SourceGenerator~ && dotnet build --configuration Release && cd ..
+
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
@@ -44,6 +52,7 @@ jobs:
       - name: Pack
         run: |
           mv Samples Samples\~
+          rm Samples.meta
           rm -r SourceGenerator~
           rm .VERSION
           rm .gitignore
@@ -60,6 +69,7 @@ jobs:
   deploy:
     name: Publish Package
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     needs: build
     permissions:
      contents: read

@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Monogum.BricksBucket.PropertyRefs.SourceGenerator
 {
+#pragma warning disable CS0649
+	
 	[DataContract]
 	internal class RegistryData
 	{
@@ -29,4 +31,6 @@ namespace Monogum.BricksBucket.PropertyRefs.SourceGenerator
 		[DataMember]
 		public string type;
 	}
+	
+#pragma warning restore CS0649
 }

@@ -52,9 +52,3 @@ SourceGenerator~/bin/
 SourceGenerator~/obj/
 
 Plugins/Editor/PropertyRefsSourceGenerator.dll
-
-Plugins/Editor/PropertyRefsSourceGenerator.dll.meta
-
-Plugins/Editor.meta
-
-Plugins.meta
