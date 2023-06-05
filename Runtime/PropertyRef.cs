@@ -16,6 +16,12 @@ namespace Monogum.BricksBucket.PropertyRefs
     [Serializable]
     public class PropertyRef
     {
+#if PROPERTY_REFS_SOURCE_GENERATOR_ENABLED
+        public static IRegistryProvider Registry { get; } = new HardwiredProvider();
+#else
+        public static IRegistryProvider Registry { get; } = new ReflectionProvider();
+#endif
+        
         [SerializeField]
         private Object component;
 
@@ -61,32 +67,21 @@ namespace Monogum.BricksBucket.PropertyRefs
         /// Gets the Type of the property.
         /// </summary>
         /// <returns>Null if has not been assigned.</returns>
-        public Type GetPropertyType()
-        {
-            return PropertiesRegistry.ContainsProperty(Component, Property)
-                ? PropertiesRegistry.GetPropertyType(Component, Property)
-                : null;
-        }
+        public Type GetPropertyType() => 
+			Registry.GetPropertyType(Component, Property);
 
         /// <summary>
         /// Gets the value of the reference.
         /// </summary>
         /// <returns>Null if has not been assigned.</returns>
-        public object GetValue()
-        {
-            return PropertiesRegistry.ContainsProperty(Component, Property)
-                ? PropertiesRegistry.GetValue(Component, Property)
-                : null;
-        }
+        public object GetValue() => 
+			Registry.GetValue(Component, Property);
 
         /// <summary>
         /// Sets the value of the property to use as reference.
         /// </summary>
         /// <param name="propertyValue">New value of the reference.</param>
-        public void SetValue(object propertyValue)
-        {
-            if (!PropertiesRegistry.ContainsProperty(Component, Property)) return;
-            PropertiesRegistry.SetValue(Component, Property, propertyValue);
-        }
+        public void SetValue(object propertyValue) => 
+            Registry.SetValue(Component, Property, propertyValue);
     }
 }
