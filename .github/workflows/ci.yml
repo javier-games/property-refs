@@ -44,6 +44,7 @@ jobs:
       - name: Pack
         run: |
           mv Samples Samples\~
+          rm -r SourceGenerator~
           rm .VERSION
           rm .gitignore
           rm .releaserc.json
