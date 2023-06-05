@@ -1,5 +1,6 @@
 {
-    "name": "Monogum.BricksBucket.PropertyRefs.Samples",
+    "name": "Monogum.BricksBucket.PropertyRefs.Samples.PropertyRefsSourceGenerator",
+    "rootNamespace": "",
     "references": [
         "GUID:acabe4d4c662f443ca3c24547090cbc7"
     ],

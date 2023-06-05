@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Monogum.BricksBucket.PropertyRefs.Samples.RefsComponentPrefabs
+namespace Monogum.BricksBucket.PropertyRefs.Samples.PropertyRefsSourceGenerator
 {
     /// <summary>
     /// Assign this script to a game object and assign a GameObject or component to it.
