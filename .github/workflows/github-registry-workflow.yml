@@ -5,6 +5,7 @@ on:
       - release/*
       - hotfix/*
       - develop
+      - feat/*
 
 jobs:
 
