@@ -48,19 +48,30 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
                 return;
             }
 
-            if (PropertiesRegistry.ContainsComponent(_reference.Component))
+            if (PropertyRef.Registry.ContainsComponent(_reference.Component))
             {
                 if (string.IsNullOrEmpty(_reference.Property))
                 {
                     SelectProperty(position);
                     StoreData(property);
-                    return;
                 }
-
-                DrawReference(position);
+                else if (!PropertyRef.Registry.ContainsProperty(_reference.Component, _reference.Property))
+                {
+                    RegistryProperty(position);
+                    StoreData(property);
+                }
+                else
+                {
+                    DrawReference(position);
+                    StoreData(property);
+                }
+            }
+            else
+            {
+                RegistryComponent(position);
+                StoreData(property);
             }
 
-            StoreData(property);
         }
 
         private void SelectObject(Rect position)
@@ -124,7 +135,7 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
         private void SelectProperty(Rect position)
         {
             // Dropdown Setup
-            _propertiesInfo = PropertiesRegistry.GetAvailableProperties(_reference.Component);
+            _propertiesInfo = ReflectionUtils.GetAvailableProperties(_reference.Component);
 
             // Fill Dropdown.
             _dropdownValues.Clear();
@@ -132,7 +143,7 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
             _dropdownDisplay.Add("Select Property...");
             foreach (var propertyInfo in _propertiesInfo)
             {
-                if (!PropertiesRegistry.IsSupportedProperty(propertyInfo)) { continue; }
+                if (!ReflectionUtils.IsSupportedProperty(propertyInfo)) { continue; }
 
                 _dropdownValues.Add(propertyInfo.Name);
                 _dropdownDisplay.Add(ObjectNames.NicifyVariableName(propertyInfo.Name));
@@ -164,6 +175,87 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
                     : string.Empty
             );
         }
+
+        private void RegistryProperty(Rect position)
+        {
+            var propertyName = _reference.Property;
+            
+            var rectMessage = position;
+            rectMessage.width = EditorGUIUtility.labelWidth;
+            var rectButtonCancel = position;
+            rectButtonCancel.width =
+                (position.width - rectMessage.width) * 0.5f;
+            rectButtonCancel.x = position.x + rectMessage.width;
+            var rectButtonOk = rectButtonCancel;
+            rectButtonOk.x += rectButtonCancel.width;
+            rectMessage.width -= 5;
+
+            EditorGUI.LabelField(
+                rectMessage,
+                new GUIContent(
+                    "Property Not Found!",
+                    // ReSharper disable once StringLiteralTypo
+                    EditorGUIUtility.IconContent("console.warnicon.sml").image,
+                    $"The Property {propertyName} is not registered yet."
+                )
+            );
+
+            EditorGUI.BeginChangeCheck();
+            GUI.Button(rectButtonCancel, "Cancel");
+            if (EditorGUI.EndChangeCheck())
+            {
+                _reference.SetProperty(string.Empty);
+            }
+
+            EditorGUI.BeginChangeCheck();
+            GUI.Button(rectButtonOk, "Register");
+            if (EditorGUI.EndChangeCheck())
+            {
+                var type = _reference.Component.GetType();
+                var propertyInfo = type.GetProperty(propertyName);
+                RegistryUtils.RegisterProperty(_reference.Component.GetType(), propertyInfo);
+            }
+        }
+        
+        private void RegistryComponent(Rect position)
+        {
+            var type = _reference.Component.GetType();
+            
+            var rectMessage = position;
+            rectMessage.width = EditorGUIUtility.labelWidth;
+            var rectButtonCancel = position;
+            rectButtonCancel.width =
+                (position.width - rectMessage.width) * 0.5f;
+            rectButtonCancel.x = position.x + rectMessage.width;
+            var rectButtonOk = rectButtonCancel;
+            rectButtonOk.x += rectButtonCancel.width;
+            rectMessage.width -= 5;
+
+            EditorGUI.LabelField(
+                rectMessage,
+                new GUIContent(
+                    "Component Not Found!",
+                    // ReSharper disable once StringLiteralTypo
+                    EditorGUIUtility.IconContent("console.warnicon.sml").image,
+                    $"The Object {type.Name} is not registered yet."
+                )
+            );
+
+            EditorGUI.BeginChangeCheck();
+            GUI.Button(rectButtonCancel, "Cancel");
+            if (EditorGUI.EndChangeCheck())
+            {
+                _reference.SetComponent(null);
+            }
+
+            EditorGUI.BeginChangeCheck();
+            GUI.Button(rectButtonOk, "Register");
+            if (EditorGUI.EndChangeCheck())
+            {
+                RegistryUtils.RegisterComponent(_reference.Component.GetType());
+            }
+        }
+
 
         private void DrawReference(Rect position)
         {
@@ -290,10 +382,16 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
 
             if (type == typeof(Quaternion))
             {
+                var quaternion = (Quaternion)_reference.GetValue();
                 var aux = EditorGUI.Vector4Field(
                     propertyPosition,
                     label,
-                    (Vector4)_reference.GetValue()
+                    new Vector4(
+                        quaternion.x, 
+                        quaternion.y, 
+                        quaternion.z, 
+                        quaternion.w
+                    )
                 );
                 _reference.SetValue(
                     new Quaternion(aux.x, aux.y, aux.z, aux.w)
