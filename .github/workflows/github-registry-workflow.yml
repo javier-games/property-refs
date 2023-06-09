@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+      - main
+      - release/*
+      - hotfix/*
+      - develop
+
+jobs:
+
+  build:
+    name: Build Package
+    uses: ./.github/workflows/build-package-workflow.yml
+    with:
+      package-name: "@$GITHUB_REPOSITORY"
+
+  deploy-internal:
+    name: Private Deploy
+    needs: build
+    permissions:
+      packages: write
+      contents: read
+    uses: ./.github/workflows/deploy-package-workflow.yml
+    with:
+      registry-url: 'https://npm.pkg.github.com'
+      public: false
+    secrets:
+      access-token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-public:
+    name: Public Deploy
+    needs: build
+    if: github.ref == 'refs/heads/main'
+      || startsWith(github.ref, 'refs/heads/release/')
+      || startsWith(github.ref, 'refs/heads/hotfix/')
+    permissions:
+      packages: write
+      contents: read
+    uses: ./.github/workflows/deploy-package-workflow.yml
+    with:
+      registry-url: 'https://npm.pkg.github.com'
+      public: true
+    secrets:
+      access-token: ${{ secrets.GITHUB_TOKEN }}

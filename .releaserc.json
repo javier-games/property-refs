@@ -5,6 +5,18 @@
     {
       "name": "develop",
       "prerelease": "dev"
+    },
+    {
+      "name": "release/*",
+      "prerelease": "rc"
+    },
+    {
+      "name": "hotfix/*",
+      "prerelease": "rc"
+    },
+    {
+      "name": "feature/*",
+      "prerelease": "feat"
     }
   ],
   "plugins": [
@@ -27,6 +39,10 @@
           {
             "type": "fixed",
             "release": "patch"
+          },
+          {
+            "type": "removed",
+            "release": "minor"
           }
         ]
       }
@@ -39,9 +55,11 @@
           "types": [
             {"type": "added", "section": ":sparkles: Added", "hidden": false},
             {"type": "changed", "section": ":hammer: Changed", "hidden": false},
-            {"type": "updated", "section": ":hammer: Changed", "hidden": false},
-            {"type": "fixed", "section": ":tools: Fixed", "hidden": false},
-            {"type": "docs", "hidden": true}
+            {"type": "updated", "section": ":tools: Changed", "hidden": false},
+            {"type": "fixed", "section": ":wrench: Fixed", "hidden": false},
+            {"type": "removed", "section": ":skull: Deprecated", "hidden": false},
+            {"type": "docs", "hidden": true},
+            {"type": "ci", "hidden": true}
           ]
         }
       }
@@ -49,8 +67,8 @@
     [
       "@semantic-release/exec",
       {
-        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION",
-        "publishCmd": "echo ${nextRelease.version} > .VERSION"
+        "verifyReleaseCmd": "jq --arg version \"${nextRelease.version}\" '.version=$version' package.json > tmp.json ",
+        "prepareCmd": "mv tmp.json package.json"
       }
     ],
     [
@@ -63,7 +81,8 @@
       "@semantic-release/git",
       {
         "assets": [
-          "CHANGELOG.md"
+          "CHANGELOG.md",
+          "package.json"
         ]
       }
     ]

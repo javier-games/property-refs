@@ -1,0 +1,15 @@
+{
+    "name": "Monogum.BricksBucket.PropertyRefs.Samples",
+    "references": [
+        "GUID:acabe4d4c662f443ca3c24547090cbc7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
