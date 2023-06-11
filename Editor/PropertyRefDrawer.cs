@@ -62,7 +62,7 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
                 }
                 else
                 {
-                    DrawReference(position);
+                    DrawReference(position, property);
                     StoreData(property);
                 }
             }
@@ -257,9 +257,8 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
         }
 
 
-        private void DrawReference(Rect position)
+        private void DrawReference(Rect position, SerializedProperty reference)
         {
-
             var propertyPosition = position;
             propertyPosition.width -= 30;
             var rectButtonRemove = position;
@@ -278,17 +277,29 @@ namespace Monogum.BricksBucket.PropertyRefs.Editor
                 return;
             }
 
-            var owner = GetGameObjectFromComponent(_reference.Component);
-            var ownerLabel = string.Empty;
-            if ((object)owner != null)
+            var referenceName = reference.name;
+            var isArray = reference.propertyPath.Contains("Array.data");
+            string nameLabel;
+
+            if (!isArray)
             {
-                // ReSharper disable once PossibleNullReferenceException
-                ownerLabel = owner.name + ":";
+                nameLabel = ObjectNames.NicifyVariableName(referenceName);
             }
 
-            var label = new GUIContent(
-                ownerLabel + ObjectNames.NicifyVariableName(_reference.Property)
-            );
+            else
+            {
+                var owner = GetGameObjectFromComponent(_reference.Component);
+                var ownerLabel = string.Empty;
+                if ((object)owner != null)
+                {
+                    // ReSharper disable once PossibleNullReferenceException
+                    ownerLabel = owner.name + " : ";
+                }
+
+                nameLabel = ownerLabel + ObjectNames.NicifyVariableName(_reference.Property);
+            }
+            
+            var label = new GUIContent(nameLabel);
 
             EditorGUI.BeginChangeCheck();
 
