@@ -1,6 +1,6 @@
 # PropertyRefs for Unity
 
-PropertyRefs is a comprehensive tool for Unity, crafted to streamline your game development tasks. By creating references to the properties of the components, you can efficiently access and manipulate them from other scripts, centralizing meaningful properties of a game object, prefab, or a scene in one location. This is a significant advantage for game designers and level designers, offering an enhanced and seamless workflow.
+PropertyRefs is a comprehensive tool for Unity, crafted to streamline your game development tasks. By creating references to the properties of the components, you can efficiently access and manipulate them from other scripts, centralizing meaningful properties of a game object, prefab, or a scene in one location. This is a significant advantage for game and level designers, offering an enhanced and seamless workflow.
 
 ![Property Refs Sample](Documentation~/Images/property-refs-sample.gif)
 
@@ -12,11 +12,11 @@ With a custom property drawer, PropertyRefs provides an intuitive interface for 
 
 ### Access from Code
 
-Developers have the flexibility to modify the values of the PropertyRefs programmatically, introducing a new level of adaptability to your Unity projects. For more information on how to access and modify properties programmatically, please refer to our [Usage Section](#usage). 
+Developers have the flexibility to modify the values of the PropertyRefs programmatically. For more information on how to access and modify properties programmatically, please refer to the [Property Access Methods](#property-access-methods) section. 
 
 ### AOT Systems Support
 
-PropertyRefs is equipped with a dual-mode functionality. Initially, it uses System Reflection to access the values of component properties. However, for AOT systems, where System Reflection is not applicable, PropertyRefs seamlessly switches to a Roslyn Source Generator. For more details on how AOT systems are supported, please see our [Usage Section](#usage).
+PropertyRefs is equipped with a dual-mode functionality. Initially, it uses System Reflection to access the values of component properties. However, for AOT systems, where System Reflection is not applicable, PropertyRefs seamlessly switches to a Roslyn Source Generator. For more details on how AOT systems are supported, please see the [AOT Systems Support and Code Generation](#aot-systems-support-and-code-generation) section.
 
 ## Installation
 
@@ -61,20 +61,6 @@ Alternatively, you can directly modify your `Packages/manifest.json` file to add
 ```
 Ensure to replace 1.0.0 with the version number of the PropertyRefs package you intend to install. Save your manifest.json file after making these changes.
 
-
-### Installation via tarball
-
-To install PropertyRefs from a tarball in Unity, follow these steps:
-
-1. Download the tarball file (`games.monogum.bricksbucket.propertyrefs.{version}.tgz`) from the releases section of this repository.
-2. Open your Unity project and navigate to `Window > Package Manager`.
-3. In the Package Manager window, click on the `+` icon in the top-left corner.
-4. From the dropdown, select `Add package from tarball...`.
-5. A file explorer window will open. Navigate to the location where you saved the downloaded tarball file.
-6. Select the tarball file and click `Open`.
-
-Unity will automatically install the package from the tarball file. The package should now be listed in the Package Manager.
-
 ### Installation via Cloning
 
 To install PropertyRefs by cloning the repository and adding the package from disk, follow these steps:
@@ -83,25 +69,29 @@ To install PropertyRefs by cloning the repository and adding the package from di
 ```shell
 git clone https://github.com/javier-games/property-refs.git
 ```
-2. Rename the folder `Samples` to `Samples~`.
-```shell
-mv Samples Samples\~
-```
-3. Open your Unity project and navigate to `Window > Package Manager`.
-4. In the Package Manager window, click on the `+` icon in the top-left corner.
-5. From the dropdown, select `Add package from disk...`. 
-6. A file explorer window will open. Navigate to the location where you cloned the repository.
-7. Find and select the `package.json` file within the cloned repository and click `Open`.
+2. Open your Unity project and navigate to `Window > Package Manager`.
+3. In the Package Manager window, click on the `+` icon in the top-left corner.
+4. From the dropdown, select `Add package from disk...`. 
+5. A file explorer window will open. Navigate to the location where you cloned the repository.
+6. Find and select the `package.json` file within the cloned repository and click `Open`.
 
 Unity will automatically detect and install the package. The package should now be listed in the Package Manager.
 
+### Install Specific Versions
 
+Alternatively if you only need a specific version of the project you can select the `Add package from git URL...` and introduce the url of this repository.
+```
+https://github.com/javier-games/property-refs
+```
+Also you can download the tarball file (`games.monogum.bricksbucket.propertyrefs.{version}.tgz`) from the [releases section](https://github.com/javier-games/property-refs/releases) of this repository and add it throw the `Add package from tarball...` option.
 
 ## Usage
 
-![Property Refs Sample List](Documentation~/Images/property-refs-sample-list.png)
+PropertyRefs is designed with an intuitive interface to ensure a seamless and user-friendly experience. To use PropertyRefs in your projects, follow the general usage instructions below:
 
-PropertyRefs is designed with user-friendliness in mind, intending to enhance your Unity development experience. It simplifies your process of accessing and modifying component properties, making it an indispensable tool for any Unity developer.
+### General Usage
+
+To establish a reference to the properties of your components, declare a private `SerializedProperty` or a public field of `PropertyRef` type in a custom class. Once declared, the Inspector will allow you to select the component and the property for the reference.
 
 ```csharp
 using System.Collections.Generic;
@@ -110,39 +100,60 @@ using Monogum.BricksBucket.PropertyRefs;
 
 public class PrefabProperties : MonoBehaviour
 {
-
    [SerializeField]
-   private PropertyRef propertyRef;
+   private PropertyRef myPropertyRef;
    
    [SerializeField]
-   private List<PropertyRef> properties;
+   private List<PropertyRef> myListOfProperties;
 }
 ```
 
-### Code
+You can also declare a list of `PropertyRef` instances. In this mode, PropertyRefs conveniently labels the properties in the list with the name of the game object and the property. This labeling facilitates easier identification of properties.
+
+![Property Refs Sample List](Documentation~/Images/property-refs-sample-list.png)
+
+### Property Access Methods
+
+To ensure that a newly created component's properties are identifiable by PropertyRefs, the properties must be declared with read and write access. If a property lacks read and write access, PropertyRefs won't be able to identify it.
+
+```csharp
+using UnityEngine;
+
+public class CustomComponent : MonoBehaviour
+{
+    public float MyFindableProperty { get; set; }
+}
+```
+
+Moreover, PropertyRefs enables you to modify and obtain the value of the `PropertyRef` programmatically. However, caution is advised as this option doesn't recommend the assignment of values that are of a different type to the `PropertyRef`. If such an assignment occurs, the value of the `PropertyRef` will remain unchanged.
 
 ```csharp
 using UnityEngine;
 using Monogum.BricksBucket.PropertyRefs;
 
-public class OrcController : MonoBehaviour
+public class EditableProperty : MonoBehaviour
 {
-	[SerializeField]
-	private PropertyRef propertyRef;
+    [SerializeField]
+    private PropertyRef myEditablePropertyRef;
 
-	private void Start()
-	{
-		var value = (float) propertyRef.GetValue();
-		Debug.Log($"My value is {value}");
+    private void Start()
+    {
+        var value = (float) myEditablePropertyRef.GetValue();
+        Debug.Log($"My value is {value}");
 
-		value += 5;
-		propertyRef.SetValue(value);
-		Debug.Log($"My new value is {value}");
-	}
+        value += 5;
+        myEditablePropertyRef.SetValue(value);
+        Debug.Log($"My new value is {value}");
+    }
 }
 ```
 
-### AOT Support
+### AOT Systems Support and Code Generation
+
+PropertyRefs includes a built-in Roslyn source generator for supporting Ahead-Of-Time (AOT) systems, like iOS. To activate this feature, locate a `Registry.PropertyRefsSourceGenerator.additionalfile` file somewhere in your project. This file serves as a registry for the properties you can use.
+
+When a component or a property that isn't registered is assigned to a `PropertyRef`, it will display an option for you to register them. This ensures that your AOT system is fully supported and that your property references are generated correctly. The JSON file below is a sample of how the registry is conformed.
+
 ```json
 {
    "components": [
@@ -158,9 +169,12 @@ public class OrcController : MonoBehaviour
    ]
 }
 ```
-## Donations
 
-PropertyRefs is a open source project, and it's because of your support that we can stay up and running. If you find this project useful, please consider [making a donation](https://www.paypal.com/donate/?hosted_button_id=QY4PCGA8FMCC4). Your contribution will help us to maintain the project, and continue to develop new features. We appreciate your generosity!
+With these features and flexible options, PropertyRefs aims to enhance your Unity development experience, offering an enhanced and seamless workflow.
+
+## License
+
+PropertyRefs is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
 
 ## Contribution
 
@@ -168,8 +182,14 @@ Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a Pull R
 
 ## Support
 
-For any questions or issues, please open a new issue on this repository.
+For any questions or issues, please open a [new issue](https://github.com/javier-games/property-refs/issues) on this repository.
 
-## License
+## Donations
 
-PropertyRefs is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+PropertyRefs is a open source project, and it's because of your support that we can stay up and running. If you find this project useful, please consider [making a donation](https://www.paypal.com/donate/?hosted_button_id=QY4PCGA8FMCC4). Your contribution will help us to maintain the project, and continue to develop new features. We appreciate your generosity!
+
+## Acknowledgements
+
+We would like to express our gratitude to [Kenney](https://www.kenney.nl) for providing the assets used to create the sample images in this repository. These assets are under the Creative Commons Zero (CC0) license.
+
+Kenney's contribution to the gaming community is significant and invaluable. We strongly encourage you to support his work by making a donation on [Kenney's Donation Page](https://www.kenney.nl/donate) or becoming a patron on [Patreon](https://www.patreon.com/kenney).
