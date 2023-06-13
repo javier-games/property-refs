@@ -12,7 +12,7 @@ jobs:
     name: Build Package
     uses: ./.github/workflows/build-package-workflow.yml
     with:
-      package-name: "@$GITHUB_REPOSITORY"
+      overwrite-publish-config: "https://npm.pkg.github.com/@$GITHUB_REPOSITORY_OWNER"
 
   deploy-internal:
     name: Private Deploy
@@ -23,7 +23,7 @@ jobs:
     uses: ./.github/workflows/deploy-package-workflow.yml
     with:
       registry-url: 'https://npm.pkg.github.com'
-      public: false
+      public: true
     secrets:
       access-token: ${{ secrets.GITHUB_TOKEN }}
 
