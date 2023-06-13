@@ -1,5 +1,11 @@
 # PropertyRefs for Unity
 
+![Build status](https://github.com/javier-games/property-refs/actions/workflows/npm-registry-workflow.yml/badge.svg)
+
+[//]: # ([![Asset Store]&#40;https://img.shields.io/badge/Asset_Store-Available-blue.svg?logo=unity&#41;]&#40;https://assetstore.unity.com)
+
+[![Donate](https://img.shields.io/badge/Give_Support-blue.svg?logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=QY4PCGA8FMCC4)
+
 PropertyRefs is a comprehensive tool for Unity, crafted to streamline your game development tasks. By creating references to the properties of the components, you can efficiently access and manipulate them from other scripts, centralizing meaningful properties of a game object, prefab, or a scene in one location. This is a significant advantage for game and level designers, offering an enhanced and seamless workflow.
 
 ![Property Refs Sample](Documentation~/Images/property-refs-sample.gif)
@@ -182,7 +188,7 @@ Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a Pull R
 
 ## Support
 
-For any questions or issues, please open a [new issue](https://github.com/javier-games/property-refs/issues) on this repository.
+For any questions or issues, please open a [new issue](https://github.com/javier-games/property-refs/issues/new) on this repository.
 
 ## Donations
 
