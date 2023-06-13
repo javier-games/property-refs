@@ -58,6 +58,7 @@
             {"type": "updated", "section": ":tools: Changed", "hidden": false},
             {"type": "fixed", "section": ":wrench: Fixed", "hidden": false},
             {"type": "removed", "section": ":skull: Deprecated", "hidden": false},
+            {"type": "doc", "hidden": true},
             {"type": "docs", "hidden": true},
             {"type": "ci", "hidden": true}
           ]
@@ -67,8 +68,7 @@
     [
       "@semantic-release/exec",
       {
-        "verifyReleaseCmd": "jq --arg version \"${nextRelease.version}\" '.version=$version' package.json > tmp.json ",
-        "prepareCmd": "mv tmp.json package.json"
+        "prepareCmd": "./.github/set-version.sh ${nextRelease.version}"
       }
     ],
     [
