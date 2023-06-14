@@ -1,8 +1,8 @@
 on:
   workflow_call:
     inputs:
-      package-name:
-        description: 'Change the name of the package.'
+      overwrite-publish-config:
+        description: 'Changes the publish config registry URL.'
         required: false
         type: string
 
@@ -33,7 +33,7 @@ jobs:
       - name: Pack
         uses: ./.github/actions/prepare-package
         with:
-          name: ${{ inputs.package-name }}
+          overwrite-publish-config: ${{ inputs.overwrite-publish-config }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3

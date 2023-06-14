@@ -1,15 +1,14 @@
 name: 'Prepare Package'
 description: 'Sets the content of the package and build it.'
 inputs:
-  name:
-    description: 'Change the name of the package.'
+  overwrite-publish-config:
+    description: 'Changes the publish config registry URL.'
     required: false
-    default: ""
 runs:
   using: "composite"
   steps:
     - name: Set Name of the Package
-      run: ${GITHUB_ACTION_PATH}/set-package-name.sh ${{ inputs.name }}
+      run: ${GITHUB_ACTION_PATH}/set-publish-config.sh ${{ inputs.overwrite-publish-config }} "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
       shell: bash
 
     - name: Upload Artifact
