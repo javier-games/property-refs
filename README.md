@@ -1,10 +1,12 @@
 # PropertyRefs for Unity
 
-![Build status](https://github.com/javier-games/property-refs/actions/workflows/npm-registry-workflow.yml/badge.svg)
+[![Build status](https://github.com/javier-games/property-refs/actions/workflows/ci.yml/badge.svg)]()
 
-[//]: # ([![Asset Store]&#40;https://img.shields.io/badge/Asset_Store-Available-blue.svg?logo=unity&#41;]&#40;https://assetstore.unity.com)
+[//]: # ([![Asset Store]&#40;https://img.shields.io/badge/asset_store-available-blue.svg?logo=unity&#41;]&#40;https://assetstore.unity.com&#41;)
 
-[![Donate](https://img.shields.io/badge/Give_Support-blue.svg?logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=QY4PCGA8FMCC4)
+[![Asset Store](https://img.shields.io/badge/npm-available-blue.svg?logo=npm)](https://www.npmjs.com/package/games.monogum.bricksbucket.propertyrefs)
+
+[![Donate](https://img.shields.io/badge/support-available-blue.svg?logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=QY4PCGA8FMCC4)
 
 PropertyRefs is a comprehensive tool for Unity, crafted to streamline your game development tasks. By creating references to the properties of the components, you can efficiently access and manipulate them from other scripts, centralizing meaningful properties of a game object, prefab, or a scene in one location. This is a significant advantage for game and level designers, offering an enhanced and seamless workflow.
 
@@ -23,6 +25,10 @@ Developers have the flexibility to modify the values of the PropertyRefs program
 ### AOT Systems Support
 
 PropertyRefs is equipped with a dual-mode functionality. Initially, it uses System Reflection to access the values of component properties. However, for AOT systems, where System Reflection is not applicable, PropertyRefs seamlessly switches to a Roslyn Source Generator. For more details on how AOT systems are supported, please see the [AOT Systems Support and Code Generation](#aot-systems-support-and-code-generation) section.
+
+## Requirements
+
+The PropertyRefs package is currently supported on `Unity 2021.3.17f1`. Usage in other versions of Unity may result in unexpected behavior. Please ensure your Unity environment meets this requirement before installation to guarantee the package's optimal functionality.
 
 ## Installation
 
@@ -89,7 +95,7 @@ Alternatively if you only need a specific version of the project you can select 
 ```
 https://github.com/javier-games/property-refs
 ```
-Also you can download the tarball file (`games.monogum.bricksbucket.propertyrefs.{version}.tgz`) from the [releases section](https://github.com/javier-games/property-refs/releases) of this repository and add it throw the `Add package from tarball...` option.
+Also you can download the tarball file (`games.monogum.bricksbucket.propertyrefs-{version}.tgz`) from the [releases section](https://github.com/javier-games/property-refs/releases) of this repository and add it throw the `Add package from tarball...` option.
 
 ## Usage
 
