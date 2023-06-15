@@ -40,9 +40,9 @@ jobs:
       - name: Publish
         run: |
           if ${{ inputs.dry }}; then
-            npm publish *.tgz --access --dry-run
+            npm publish *.tgz --dry-run
           else
-            npm publish *.tgz --access
+            npm publish *.tgz
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.access-token }}
