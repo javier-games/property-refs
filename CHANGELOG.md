@@ -1,3 +1,11 @@
+## [0.1.0-dev.3](https://github.com/javier-games/property-refs/compare/0.1.0-dev.2...0.1.0-dev.3) (2023-06-15)
+
+
+### :hammer: Changed
+
+* Property references view. ([6245b94](https://github.com/javier-games/property-refs/commit/6245b94811042f7d87c301d2876e44869e8c526a))
+* Samples to Samples~ ([59f05d0](https://github.com/javier-games/property-refs/commit/59f05d053615088c37de5051a996746b44d3dcdb))
+
 ## [0.1.0-dev.2](https://github.com/javier-games/property-refs/compare/0.1.0-dev.1...0.1.0-dev.2) (2023-06-09)
 
 
