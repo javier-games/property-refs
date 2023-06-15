@@ -2,6 +2,8 @@ if [ $# -ne 2 ]; then
   exit 0
 fi
 
+brew install jq
+
 OVERWRITE_PUBLISH_CONFIG="$1"
 
 if [ -n "$OVERWRITE_PUBLISH_CONFIG" ]; then

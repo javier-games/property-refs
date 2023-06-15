@@ -52,3 +52,5 @@ SourceGenerator~/bin/
 SourceGenerator~/obj/
 
 Plugins/Editor/PropertyRefsSourceGenerator.dll
+
+*.tgz
