@@ -1,12 +1,17 @@
 on:
   workflow_call:
     inputs:
+      artifact-name:
+        description: 'Name of the artifact for this package.'
+        required: false
+        type: string
+        default: package
       registry-url:
         description: 'URL of the target registry to deploy.'
         required: false
         type: string
-        default: 'https://npm.pkg.github.com'
-      public:
+        default: 'https://registry.npmjs.org'
+      dry:
         description: "Whether to publish publicly or restricted"
         required: false
         type: boolean
@@ -30,14 +35,14 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v3
         with:
-          name: package
+          name: ${{ inputs.artifact-name }}
 
       - name: Publish
         run: |
-          if ${{ inputs.public }}; then
-            npm publish *.tgz --access public
+          if ${{ inputs.dry }}; then
+            npm publish *.tgz --access --dry-run
           else
-            npm publish *.tgz --access restricted
+            npm publish *.tgz --access
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.access-token }}
